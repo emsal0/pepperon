@@ -1,0 +1,6 @@
+[package]
+name = "pepperon"
+version = "0.1.0"
+authors = ["Em Sal <absolutezero2a03@gmail.com>"]
+
+[dependencies]
