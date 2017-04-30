@@ -4,3 +4,5 @@ version = "0.1.0"
 authors = ["Em Sal <emsal1863@gmail.com>"]
 
 [dependencies]
+mp4parse = "0.8.0"
+ffmpeg-sys = "3.2.1"

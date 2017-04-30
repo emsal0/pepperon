@@ -7,10 +7,7 @@ fn main() {
     let mut x = env::args().nth(1);
     match x {
         Some(x) => {
-            let mut file = {
-                let path_x = Path::new(&x);
-                File::open(path_x)
-            };
+            let mut file = File::open(&x);
 
             match file {
                 Ok(mut f) => {
