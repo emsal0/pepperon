@@ -7,17 +7,38 @@ fn get_codec_type(mut p_format_ctx: *mut ffmpeg_sys::AVFormatContext) {
     return;
 }
 
-fn process_vid(mut p_format_ctx: *mut ffmpeg_sys::AVFormatContext, x: String) {
-    unsafe {
-        let xcstr = CString::new(x).unwrap();
+// This isn't doing the desired side effects... hmm.
+// Something related to mutability -- will see what this is all about
+fn ffmpeg_open_file(mut p_format_ctx: *mut ffmpeg_sys::AVFormatContext, filename: &CString) -> bool {
+    let f = String::from_utf8(filename.as_bytes().to_vec());
+    match f {
+        Ok(s) =>
+            println!("attempting to open file {}", s),
+        Err(e) => ()
+    };
 
-        // Unsafe function
+    return unsafe {
         if ffmpeg_sys::avformat_open_input(
                 &mut p_format_ctx,
-                xcstr.as_ptr(),
+                filename.as_ptr(),
                 std::ptr::null_mut(),
                 std::ptr::null_mut()) != 0 {
 
+            false
+        } else {
+            true
+        }
+    };
+}
+
+fn process_vid(mut p_format_ctx: *mut ffmpeg_sys::AVFormatContext, x: String) {
+    unsafe {
+        let xcstr = CString::new(x).unwrap();
+        let openresult = ffmpeg_open_file(p_format_ctx, &xcstr);
+
+        println!("open result: {}", openresult);
+
+        if !openresult {
             println!("Can't open file");
             return;
         }
